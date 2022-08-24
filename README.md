@@ -1,0 +1,1 @@
+# sharp config for optimization images
