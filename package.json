@@ -1,0 +1,22 @@
+{
+  "name": "sharp-config",
+  "version": "1.0.0",
+  "description": "",
+  "private": true,
+  "scripts": {
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/VladPalaev/sharp-config.git"
+  },
+  "keywords": [],
+  "author": "Vladislav Palaev <vladislav.palaev@yandex.ru>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/VladPalaev/sharp-config/issues"
+  },
+  "homepage": "https://github.com/VladPalaev/sharp-config#readme",
+  "devDependencies": {
+    "sharp": "^0.30.7"
+  }
+}
