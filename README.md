@@ -22,7 +22,7 @@ const path = require('path');
 
 ### Основные методы библиотеки path ###
 
-	`path.basename(path [, ext])`
+	path.basename(path [, ext])
 > path \<string> Путь файла или название файла  
 ext \<string> Расширение файла  
 returns \<string> Название файла
@@ -42,10 +42,10 @@ path.basename('Глава-1.txt');
 path.basename('Глава-1.txt', '.txt');
 // return Глава-1
 ```
-Note:  
+> Note:  
 метод basename() чувствителен к регистру, то есть вызов функции `path.basename('./assets'Глава-1.TXT', 'txt');` вернет `'Глава-1.TXT'`
 
-	`path.extname(path)`  
+	path.extname(path)  
 > path \<string> Путь файла или название файла  
 return \<string> Расширение файла
 
@@ -63,7 +63,7 @@ path.extname('.index');
 // return ''
 ```
 
-	`path.format(pathObject)`
+	path.format(pathObject)
 > + pathObject \<object> Объект JS, имеющий следующие свойства
 >+ dir \<string> 
 >+ root \<string> 
@@ -73,9 +73,8 @@ path.extname('.index');
 
 Метод path.format() возвращает строку пути от объекта. Это противоположно path.parse()  
 
-Note:  
-При предоставлении свойств pathObject помните, что существуют комбинации, в которых одно свойство имеет приоритет над другим:
-
+> Note:  
+При предоставлении свойств pathObject помните, что существуют комбинации, в которых одно свойство имеет приоритет над другим:  
 pathObject.root игнорируется , если pathObject.dir предоставляется
 pathObject.ext и pathObject.name игнорируются, если pathObject.base существует
 
@@ -89,12 +88,87 @@ const userPath = {
 path.format(userPath);
 // return /home/user\file.txt
 ```
-Note:  
-Стоит обратить внимание, что возращанная строка содержит разные слеши. Чтобы это избежать существует метод [path.normalize()](#test)
+> Note:  
+Стоит обратить внимание, что возращанная строка содержит разные слеши. Чтобы это избежать существует метод [path.normalize()](#path-normalize)
 
-<a name="test">
-	test
-</a>
+	path.normalize()
+<a name="path-normalize"></a>
+
+Метод path.normalize() нормализует заданный path , разрешая '..' и '.' сегменты.
+
+При обнаружении нескольких последовательных символов разделения сегментов пути (например, / в POSIX и \ или / в Windows) они заменяются одним экземпляром разделителя сегментов пути, зависящего от платформы ( / в POSIX и \ в Windows). Конечные разделители сохранены.
+
+Example:  
+```
+const result = path.format({
+	dir: '/home/user',
+	base: 'file.txt',
+});
+// return '/home/user\file.txt'
+
+В выводе функции мы видим разные слеши в одном пути. Чтобы заменить их на одинаковые мы можем использовать метод path.normalize()
+.....
+
+path.normalize(result);
+// return '\home\user\file.txt'
+```
+
+	path.parse(path)
+> path \<string> Путь к файлу  
+return \<object> Объект, свойства которого являются элементами пути
+
+Метод path.parse() возвращает объект, свойства которого представляют важные элементы path . Завершающие разделители каталогов игнорируются.  
+Возвращаемый объект будет иметь следующие свойства:
++ dir \<string>
++ root \<string>
++ base \<string>
++ name \<string>
++ ext \<string>
+
+Example:  
+```
+const directoryText = path.resolve(__dirname, 'assets', 'Глава-1.txt');
+
+path.parse(directoryText);
+
+// return 
+{
+  root: 'd:\\',
+  dir: 'd:\\sharp-config\\src\\assets',
+  base: 'Глава-1.txt',
+  ext: '.txt',
+  name: 'Глава-1'
+}
+....
+// Можно использовать, чтобы забирать название файла и его ext
+
+const {name: fileName, ext: fileExt} = path.parse('./assets/Глава-1.txt');
+```
+
+	path.relative(from, to)
+> from \<string> Откуда начинается новый путь  
+to \<string> В какой файл нужно постучаться  
+return <string> Новый относительный путь
+
+Метод path.relative() возвращает относительный путь от from до to на основе текущего рабочего каталога. Если from и to каждый разрешает один и тот же путь (после вызова path.resolve() для каждого), возвращается строка нулевой длины.
+
+Example:  
+```
+const directoryText = path.resolve(__dirname, 'assets', 'Глава-1.txt');
+
+path.relative(directoryText, path.resolve(__dirname, 'uploads/sammy.png'));
+
+// return '..\..\uploads\sammy.png'
+```
+Note:
+> Стоит помнить, что если path.relative() передать путь с файлом, то прописывает, дополнительный выход еще из этого файла и потом уже из директории, в котором находится этот файл.
+
+	path.resolve()
+
+
+
+
+
 
 ## Модуль fs (file system)
 
